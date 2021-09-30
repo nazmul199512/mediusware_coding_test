@@ -46,26 +46,45 @@
                         <th>Title</th>
                         <th>Description</th>
                         <th>Variant</th>
-                        <th width="150px">Action</th>
+                        <th width="100px">Action</th>
                     </tr>
                     </thead>
 
                     <tbody>
-
+                   <?php $i=1; ?>
+                    @foreach ($products as $product)
                     <tr>
-                        <td>1</td>
-                        <td>T-Shirt <br> Created at : 25-Aug-2020</td>
-                        <td>Quality product in low cost</td>
+                     
+
+                        <td>{{$i++}}</td>
+                        <td>{{$product->title}} <br> Created at : {{$product->created_at}}</td>
+                        <td>{{ Str::limit($product->description, 70) }}</td>
                         <td>
                             <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
 
+                           
                                 <dt class="col-sm-3 pb-0">
-                                    SM/ Red/ V-Nick
+                                @foreach($product->product_variant as $product_variant)
+                                {{ $product_variant->variant }} /
+                                @endforeach
                                 </dt>
+                              
                                 <dd class="col-sm-9">
                                     <dl class="row mb-0">
-                                        <dt class="col-sm-4 pb-0">Price : {{ number_format(200,2) }}</dt>
-                                        <dd class="col-sm-8 pb-0">InStock : {{ number_format(50,2) }}</dd>
+                                        <dt class="col-sm-4 pb-0">
+                                            
+                                        @foreach($product->price_variant as $price_variant)
+                                        Price : {{number_format($price_variant->price, 2)  }} </br>
+                                        @endforeach
+                                    
+                                        </dt>
+                                        <dd class="col-sm-8 pb-0">
+                                            
+                                        @foreach($product->price_variant as $price_variant)
+                                        InStock : {{number_format($price_variant->stock, 2)  }} </br>
+                                        @endforeach
+                                    
+                                    </dd>
                                     </dl>
                                 </dd>
                             </dl>
@@ -77,7 +96,7 @@
                             </div>
                         </td>
                     </tr>
-
+                    @endforeach
                     </tbody>
 
                 </table>
@@ -88,10 +107,10 @@
         <div class="card-footer">
             <div class="row justify-content-between">
                 <div class="col-md-6">
-                    <p>Showing 1 to 10 out of 100</p>
+                    <p>Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} out of {{ $products->total() }} </p>
                 </div>
                 <div class="col-md-2">
-
+               {{ $products->links() }}
                 </div>
             </div>
         </div>
