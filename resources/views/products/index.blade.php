@@ -51,16 +51,17 @@
                     </thead>
 
                     <tbody>
-                   <?php $i=1; ?>
+                   <?php $i=1; $x=1; ?>
+                  
                     @foreach ($products as $product)
                     <tr>
                      
 
-                        <td>{{$i++}}</td>
-                        <td>{{$product->title}} <br> Created at : {{$product->created_at}}</td>
+                        <td>{{$x++}}</td>
+                        <td>{{$product->title}} <br> Created at : {{$product->created_at->diffForHumans()}}</td>
                         <td>{{ Str::limit($product->description, 70) }}</td>
                         <td>
-                            <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
+                            <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant{{$i++}}">
 
                            
                                 <dt class="col-sm-3 pb-0">
@@ -88,7 +89,7 @@
                                     </dl>
                                 </dd>
                             </dl>
-                            <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
+                            <button onclick="$('#variant{{$i-1}}').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm">
