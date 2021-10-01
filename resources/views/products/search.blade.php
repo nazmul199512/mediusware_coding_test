@@ -22,7 +22,7 @@
                         @foreach ($variants as $variant)
 
                         <optgroup label="{{ $variant->title }}">
-                        @foreach($variant->product_variants as $value)
+                        @foreach($variant->product_variants->unique('variant') as $value)
                         <option>{{$value->variant}} </option>
                          @endforeach
                         </optgroup>
