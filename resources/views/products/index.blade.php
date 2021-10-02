@@ -1,131 +1,131 @@
-    @extends('layouts.app')
+@extends('layouts.app')
 
-    @section('content')
+@section('content')
 
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Products</h1>
-        </div>
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Products</h1>
+</div>
 
 
-        <div class="card">
-            <form action="{{url('/search')}}" method="get" class="card-header">
-                <div class="form-row justify-content-between">
-                    <div class="col-md-2">
-                        <input type="text" name="title" placeholder="Product Title" required='true' class="form-control">
+<div class="card">
+    <form action="{{url('/search')}}" method="get" class="card-header">
+        <div class="form-row justify-content-between">
+            <div class="col-md-2">
+                <input type="text" name="title" placeholder="Product Title" required='true' class="form-control">
+            </div>
+
+            <div class="col-md-2">
+                <select name="variant" required='true' id="" class="form-control">
+                <option></option>
+
+                @foreach ($variants as $variant)
+
+                <optgroup label="{{ $variant->title }}">
+                @foreach($variant->product_variants->unique('variant') as $value)
+                <option>{{$value->variant}} </option>
+                @endforeach
+                </optgroup>
+        
+                @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Price Range</span>
                     </div>
-
-                    <div class="col-md-2">
-                        <select name="variant" required='true' id="" class="form-control">
-                        <option></option>
-
-                        @foreach ($variants as $variant)
-
-                        <optgroup label="{{ $variant->title }}">
-                        @foreach($variant->product_variants->unique('variant') as $value)
-                        <option>{{$value->variant}} </option>
-                         @endforeach
-                        </optgroup>
-                   
-                        @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Price Range</span>
-                            </div>
-                            <input type="text" required='true' name="price_from" aria-label="First name" placeholder="From" class="form-control">
-                            <input type="text" required='true' name="price_to" aria-label="Last name" placeholder="To" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="date" required='true'  name="date" placeholder="Date" class="form-control">
-                    </div>
-                    <div class="col-md-1">
-                        <button type="submit" class="btn btn-primary float-right"><i class="fa fa-search"></i></button>
-                    </div>
+                    <input type="text" required='true' name="price_from" aria-label="First name" placeholder="From" class="form-control">
+                    <input type="text" required='true' name="price_to" aria-label="Last name" placeholder="To" class="form-control">
                 </div>
-            </form>
+            </div>
+            <div class="col-md-2">
+                <input type="date" required='true'  name="date" placeholder="Date" class="form-control">
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary float-right"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </form>
 
-            <div class="card-body">
-                <div class="table-response">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Variant</th>
-                            <th width="100px">Action</th>
-                        </tr>
-                        </thead>
+    <div class="card-body">
+        <div class="table-response">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Variant</th>
+                    <th width="100px">Action</th>
+                </tr>
+                </thead>
 
-                        <tbody>
-                    <?php $i=1; $x=1; ?>
+                <tbody>
+            <?php $i=1; $x=1; ?>
+            
+                @foreach ($products as $product)
+                <tr>
+                
+
+                    <td>{{$x++}}</td>
+                    <td>{{$product->title}} <br> Created at : {{$product->created_at->diffForHumans()}}</td>
+                    <td>{{ Str::limit($product->description, 40) }}</td>
+                    <td>
+                        <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant{{$i++}}">
+
                     
-                        @foreach ($products as $product)
-                        <tr>
+                            <dt class="col-sm-3 pb-0">
+                            @foreach($product->product_variant as $product_variant)
+                            {{ $product_variant->variant }} /
+                            @endforeach
+                            </dt>
                         
-
-                            <td>{{$x++}}</td>
-                            <td>{{$product->title}} <br> Created at : {{$product->created_at->diffForHumans()}}</td>
-                            <td>{{ Str::limit($product->description, 40) }}</td>
-                            <td>
-                                <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant{{$i++}}">
-
-                            
-                                    <dt class="col-sm-3 pb-0">
-                                    @foreach($product->product_variant as $product_variant)
-                                    {{ $product_variant->variant }} /
+                            <dd class="col-sm-9">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-4 pb-0">
+                                        
+                                    @foreach($product->price_variant as $price_variant)
+                                    Price : {{number_format($price_variant->price, 2)  }} </br>
                                     @endforeach
-                                    </dt>
                                 
-                                    <dd class="col-sm-9">
-                                        <dl class="row mb-0">
-                                            <dt class="col-sm-4 pb-0">
-                                                
-                                            @foreach($product->price_variant as $price_variant)
-                                            Price : {{number_format($price_variant->price, 2)  }} </br>
-                                            @endforeach
+                                    </dt>
+                                    <dd class="col-sm-8 pb-0">
                                         
-                                            </dt>
-                                            <dd class="col-sm-8 pb-0">
-                                                
-                                            @foreach($product->price_variant as $price_variant)
-                                            InStock : {{number_format($price_variant->stock, 2)  }} </br>
-                                            @endforeach
-                                        
-                                        </dd>
-                                        </dl>
-                                    </dd>
+                                    @foreach($product->price_variant as $price_variant)
+                                    InStock : {{number_format($price_variant->stock, 2)  }} </br>
+                                    @endforeach
+                                
+                                </dd>
                                 </dl>
-                                <button onclick="$('#variant{{$i-1}}').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
-                            </td>
-                            <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('product.edit', $product->id) }}" class="btn btn-success">Edit</a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                        </tbody>
+                            </dd>
+                        </dl>
+                        <button onclick="$('#variant{{$i-1}}').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{{ route('product.edit', $product->id) }}" class="btn btn-success">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+                </tbody>
 
-                    </table>
-                </div>
-
-            </div>
-
-            <div class="card-footer">
-                <div class="row justify-content-between">
-                    <div class="col-md-6">
-                        <p>Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} out of {{ $products->total() }} </p>
-                    </div>
-                    <div class="col-md-2">
-                {{ $products->links() }}
-                    </div>
-                </div>
-            </div>
+            </table>
         </div>
 
-    @endsection
+    </div>
+
+    <div class="card-footer">
+        <div class="row justify-content-between">
+            <div class="col-md-6">
+                <p>Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} out of {{ $products->total() }} </p>
+            </div>
+            <div class="col-md-2">
+        {{ $products->links() }}
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
