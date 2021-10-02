@@ -70,7 +70,7 @@
 
                             <td>{{$x++}}</td>
                             <td>{{$product->title}} <br> Created at : {{$product->created_at->diffForHumans()}}</td>
-                            <td>{{ Str::limit($product->description, 70) }}</td>
+                            <td>{{ Str::limit($product->description, 40) }}</td>
                             <td>
                                 <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant{{$i++}}">
 

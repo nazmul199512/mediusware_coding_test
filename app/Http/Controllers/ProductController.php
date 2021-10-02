@@ -100,6 +100,17 @@
             $product->sku =  $request->product_sku;
             $product->description = $request->description;
             $product->save();
+
+            if(count($request->varient_id) > 0){
+                foreach($request->varient_id as $item=>$value ){
+                    $data = array(
+                        'variant'=>$request->variant[$item],
+                        
+                    );
+                    $product_variant = ProductVariant::where('id',$request->varient_id[$item])->first();
+                    $product_variant->update($data);
+                }
+            }
             
             if(count($request->id) > 0){
                 foreach($request->id as $item=>$value ){
@@ -107,8 +118,8 @@
                         'price'=>$request->price[$item],
                         'stock'=>$request->stock[$item],
                     );
-                    $product_variant = ProductVariantPrice::where('id',$request->id[$item])->first();
-                    $product_variant->update($data);
+                    $product_price_variant = ProductVariantPrice::where('id',$request->id[$item])->first();
+                    $product_price_variant->update($data);
                 }
             }
             

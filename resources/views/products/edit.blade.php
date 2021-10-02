@@ -35,30 +35,26 @@
             <div class="col-md-6">
                 <div class="card shadow mb-4">
                       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                          Variants
+                            Variants, Price and Stock
                       </div>
                    
 
                     <div class="card-body">
                         <div class="row">
-                            <div col-md-4>
-                           
-                            </div>
+                            
 
-                            <div class="col-md-8" style="float: right;">
-                            <!-- @foreach($product->product_variant as $value)
-                            <input type="text" name="price[]" value="{{$value->variant}}" class="form-control" > 
+                            <div class="col-md-4">
+                                <p>Variants</p> </br>
+                            @foreach($product->product_variant as $value)
+                            <input type="hidden" name="varient_id[]" value="{{$value->id}}" >
+                            <input type="text" name="variant[]" value="{{$value->variant}}" class="form-control" > 
                              <hr/>
-                            @endforeach -->
+                            @endforeach
                             </div>
-                        </div>
-                    </div>
-                    
-                   
 
-                    <div class="card-header text-uppercase">Price and Stock</div>
-                    <div class="card-body">
-                        <div class="table-responsive">
+                            <div class="col-md-8">
+
+                            <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                 <tr>
@@ -82,7 +78,15 @@
                                 </tbody>
                             </table>
                         </div>
+
+
+                            </div>
+                        </div>
                     </div>
+                    
+                   
+
+
                 </div>
             </div>
         </div>
