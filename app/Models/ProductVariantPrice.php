@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductVariantPrice extends Model
 {
+    protected $fillable = [
+        'price', 'stock'
+    ];
 
 }

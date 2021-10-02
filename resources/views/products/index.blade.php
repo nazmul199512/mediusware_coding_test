@@ -16,7 +16,7 @@
 
                     <div class="col-md-2">
                         <select name="variant" required='true' id="" class="form-control">
-                        <option> </option>
+                        <option></option>
 
                         @foreach ($variants as $variant)
 

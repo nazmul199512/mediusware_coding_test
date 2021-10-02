@@ -18,8 +18,8 @@
          */
         public function index()
         {
-            $variants = Variant::all();
-            $products = Product::paginate(5);;
+            $variants = Variant::with('product_variants')->get();
+            $products = Product::with('price_variant')->paginate(5);;
             return view('products.index', ['products'=>$products, 'variants'=>$variants]);
         }
 
@@ -37,14 +37,12 @@
         // Search function for product filter 
 
         public function search()
-        {       $variants = Variant::all();   
-                
+        {       $variants = Variant::with('product_variants')->get();
                 $date = date($_GET['date']).' 00:00:00';
-            
                 $product_filter = Product::join('product_variant_prices', 'product_variant_prices.product_id','=', 'products.id')
                 ->join('product_variants', 'product_variants.product_id','=', 'products.id') 
-                ->where('products.title', 'LIKE', '%'.$_GET['title'].'%')
-                ->where('product_variants.variant', 'LIKE', '%'.$_GET['variant'].'%')
+                ->where('products.title', 'like', '%'.$_GET['title'].'%')
+                ->where('product_variants.variant', 'like', '%'.$_GET['variant'].'%')
                 ->where('products.created_at', '<=', $date)
                 ->whereBetween('product_variant_prices.price', [ $_GET['price_from'], $_GET['price_to']])  
                 ->get();   
@@ -81,10 +79,10 @@
          * @param \App\Models\Product $product
          * @return \Illuminate\Http\Response
          */
-        public function edit(Product $product)
+        public function edit($id)
         {
-            $variants = Variant::all();
-            return view('products.edit', compact('variants'));
+            $product = Product::find($id);
+            return view('products.edit', ['product'=>$product]);
         }
 
         /**
@@ -94,9 +92,27 @@
          * @param \App\Models\Product $product
          * @return \Illuminate\Http\Response
          */
-        public function update(Request $request, Product $product)
+        public function update(Request $request, $id)
         {
-            //
+            
+            $product = Product::find($id);
+            $product->title = $request->product_name;
+            $product->sku =  $request->product_sku;
+            $product->description = $request->description;
+            $product->save();
+            
+            if(count($request->id) > 0){
+                foreach($request->id as $item=>$value ){
+                    $data = array(
+                        'price'=>$request->price[$item],
+                        'stock'=>$request->stock[$item],
+                    );
+                    $product_variant = ProductVariantPrice::where('id',$request->id[$item])->first();
+                    $product_variant->update($data);
+                }
+            }
+            
+            return redirect('/product');
         }
 
         /**

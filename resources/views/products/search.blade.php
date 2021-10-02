@@ -4,7 +4,7 @@
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Products</h1>
-        <a style="float:right;" href="{{url('/product')}}" class="h3 mb-0 text-gray-800 text-info">Back to All products</a>
+        <a style="float:right;" href="{{route('product.index')}}" class="h3 mb-0 text-gray-800 text-info">Back to All products</a>
     </div>
   
 
